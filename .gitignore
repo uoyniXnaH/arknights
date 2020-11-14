@@ -1,2 +1,5 @@
 #ignore cache files
-/cache/
+*/cache/
+
+#ignore config
+*/config/
