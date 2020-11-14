@@ -1,3 +1,7 @@
+--
+-- operator info
+--
+
 CREATE TABLE IF NOT EXISTS recruitment_operator (
   codename varchar(20) NOT NULL UNIQUE,
   qualification varchar(20),
