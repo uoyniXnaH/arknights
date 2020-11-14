@@ -20,8 +20,10 @@ $app->add(TwigMiddleware::create($app, $twig));
 // Please note how $view is created from the request
 $app->get('/', function ($request, $response, $args) {
     $view = Twig::fromRequest($request);
+    $ctl = new Controllers\testCls("333");
+    $res = $ctl->getVal();
     return $view->render($response, 'top.html', [
-        'name' => "somebody"
+        'assign' => $res
     ]);
 });
 
