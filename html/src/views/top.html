@@ -1,9 +1,11 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
 <head>
 </head>
 <body>
   <h2> Title </h2>
-  <p> When {{ assign[0] }}, show the {{ assign[1] }} </p>
+  {% for item in res %}
+  <p> {{ item["value"] }} is {{ item["type"] }} </p>
+  {% endfor %}
 </body>
 </html>

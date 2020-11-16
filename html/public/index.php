@@ -16,15 +16,20 @@ $twig = Twig::create(__DIR__ . '/../src/views',
 // Add Twig-View Middleware
 $app->add(TwigMiddleware::create($app, $twig));
 
-// Example route
-// Please note how $view is created from the request
+// routes
 $app->get('/', function ($request, $response, $args) {
+    //get db settings
+    $dbSetting = Settings\settings::getDbSetting();
     $view = Twig::fromRequest($request);
-    $ctl = new Controllers\testCls("333");
-    $res = $ctl->getVal();
-    return $view->render($response, 'top.html', [
-        'assign' => $res
-    ]);
+    $ctl = new Controllers\recruitment($dbSetting);
+    $conn = $ctl->init();
+    if ($conn == 1) {
+        $res = $ctl->getLabels();
+    } else {
+        $res = $conn;
+    }
+
+    return $view->render($response, 'top.html', ["res" => $res]);
 });
 
 // Run the app

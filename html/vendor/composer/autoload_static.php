@@ -25,6 +25,7 @@ class ComposerStaticInit4db7280cd8868f991b25adcb9c828392
             'Slim\\Views\\' => 11,
             'Slim\\Psr7\\' => 10,
             'Slim\\' => 5,
+            'Settings\\' => 9,
         ),
         'P' => 
         array (
@@ -68,6 +69,10 @@ class ComposerStaticInit4db7280cd8868f991b25adcb9c828392
         'Slim\\' => 
         array (
             0 => __DIR__ . '/..' . '/slim/slim/Slim',
+        ),
+        'Settings\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/config',
         ),
         'Psr\\Log\\' => 
         array (
