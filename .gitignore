@@ -3,3 +3,6 @@
 
 #ignore config
 */config/
+
+#ignore log
+*/log/
