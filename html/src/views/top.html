@@ -4,8 +4,12 @@
 </head>
 <body>
   <h2> Title </h2>
-  {% for item in res %}
-  <p> {{ item["value"] }} is {{ item["type"] }} </p>
+  {% for type in res|keys %}
+    <p> {{ type }} :
+    {% for i in attribute(res,type) %}
+      {{ i.value }},
+    {% endfor %}
+    </p>
   {% endfor %}
 </body>
 </html>

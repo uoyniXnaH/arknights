@@ -24,9 +24,9 @@ $app->get('/recruitment', function ($request, $response, $args) {
     $ctl = new Controllers\recruitment($dbSetting);
     $conn = $ctl->init();
     if ($conn == 1) {
-        $res = $ctl->getLabels();
+        $res = $ctl->getLabelByType();
     } else {
-        $res = $conn;
+        $res = "Error";
     }
 
     return $view->render($response, 'top.html', ["res" => $res]);
