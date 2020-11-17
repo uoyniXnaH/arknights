@@ -11,16 +11,16 @@ class recruitment {
     private $pwd;
 
     function __construct($dbSetting) {
-        $host = $dbSetting(host);
-        $dbName = $dbSetting(dbname);
-        $userName = $dbSetting(user);
-        $pwd = $dbSetting(pwd);
+        $this->host = $dbSetting['host'];
+        $this->dbName = $dbSetting['dbname'];
+        $this->userName = $dbSetting['user'];
+        $this->pwd = $dbSetting['pwd'];
     }
 
     function init() {
         $dsn = "mysql:dbname=$this->dbName;host=$this->host";
         try{
-            $this->dbConn = new PDO($dsn, $this->userName, $this->pw);
+            $this->dbConn = new PDO($dsn, $this->userName, $this->pwd);
             return 1;
         } catch(Exception $e) {
             return $e->getMessage();
