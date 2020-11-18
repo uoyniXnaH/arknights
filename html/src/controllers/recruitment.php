@@ -2,6 +2,7 @@
 
 namespace Controllers;
 use \PDO;
+use \Settings;
 
 class recruitment {
     private $dbConn;
@@ -10,7 +11,8 @@ class recruitment {
     private $userName;
     private $pwd;
 
-    function __construct($dbSetting) {
+    function __construct() {
+        $dbSetting = Settings\settings::getDbSetting();
         $this->host = $dbSetting['host'];
         $this->dbName = $dbSetting['dbname'];
         $this->userName = $dbSetting['user'];
@@ -36,18 +38,18 @@ class recruitment {
         $stmt->execute();
         $types = $stmt->fetchAll();
 
-        $sql = "select * from recruitment_label where type = :type";
+        $sql = "select value,type from recruitment_label where type = :type";
         $stmt = $this->dbConn->prepare($sql);
         $result = [];
         // if type is not null, take it as query param
         if ($type) {
             $stmt->execute([':type' => $type]);
-            $result = [$type => $stmt->fetchAll()];
+            $result = [$type => $stmt->fetchAll(PDO::FETCH_ASSOC)];
         } else {
         // otherwise, query all records, and arrange them by types
             foreach ($types as $i) {
                 $stmt->execute([':type' => $i['type']]);
-                $result[$i['type']] = $stmt->fetchAll();
+                $result[$i['type']] = $stmt->fetchAll(PDO::FETCH_ASSOC);
             }
         }
 

@@ -18,10 +18,8 @@ $app->add(TwigMiddleware::create($app, $twig));
 
 // view route
 $app->get('/recruitment', function ($request, $response, $args) {
-    //get db settings
-    $dbSetting = Settings\settings::getDbSetting();
     $view = Twig::fromRequest($request);
-    $ctl = new Controllers\recruitment($dbSetting);
+    $ctl = new Controllers\recruitment();
     $conn = $ctl->init();
     if ($conn == 1) {
         $res = $ctl->getLabelByType();
@@ -32,7 +30,28 @@ $app->get('/recruitment', function ($request, $response, $args) {
     return $view->render($response, 'top.html', ["res" => $res]);
 });
 
-// view resource files
+// api route
+$app->group('/api', function ($group) {
+    $group->get('/labels', function ($request, $response, $args) {
+        $param = $request->getQueryParams();
+        if ($param['type'] == 'all') {
+            $ctl = new Controllers\recruitment();
+            $ctl->init();
+            $res = $ctl->getLabelByType();
+        } elseif ($param['type']) {
+            $ctl = new Controllers\recruitment();
+            $ctl->init();
+            $res = $ctl->getLabelByType($param['type']);
+        } else {
+            return $response->withStatus(400);
+        }
+        $response->getBody()->write(json_encode($res));
+        $response = $response->withStatus(200);
+        return $response->withHeader('Content-Type', 'application/json;charset=utf8');
+    });
+});
+
+// resource files route
 $app->get('/css/{file}', function ($request, $response, $args) {
     $file = "css/" . $args['file'];
     if ($data = file_get_contents($file)) {
