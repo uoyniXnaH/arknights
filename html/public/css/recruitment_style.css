@@ -1,0 +1,12 @@
+body {
+  font-size: 18px;
+  color: #ffeebb;
+  background-color: #555555;
+}
+
+div.main {
+  margin: auto;
+  padding: 20px 150px 20px 150px;
+  width: 80%;
+  background-color: #001a21;
+}
