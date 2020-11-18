@@ -3,9 +3,14 @@
 <head>
 </head>
 <body>
-  <h2> Title </h2>
+  <h2> 公开招募计算器 </h2>
+  {% set typeTable = {
+    'qualification':'资质',
+    'position':'位置',
+    'class':'职业',
+    'affix':'词缀'} %}
   {% for type in res|keys %}
-    <p> {{ type }} :
+    <p> {{ attribute(typeTable,type) }} :
     {% for i in attribute(res,type) %}
       {{ i.value }},
     {% endfor %}

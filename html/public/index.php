@@ -27,7 +27,7 @@ $app->get('/recruitment', function ($request, $response, $args) {
         $res = "Error";
     }
 
-    return $view->render($response, 'top.html', ["res" => $res]);
+    return $view->render($response, 'recruitment.html', ["res" => $res]);
 });
 
 // api route
