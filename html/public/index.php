@@ -5,6 +5,7 @@ use Slim\Views\Twig;
 use Slim\Views\TwigMiddleware;
 
 require __DIR__ . '/../vendor/autoload.php';
+require __DIR__ . '/define.php';
 
 // Create App
 $app = AppFactory::create();
@@ -22,7 +23,7 @@ $app->get('/recruitment', function ($request, $response, $args) {
     $ctl = new Controllers\recruitment();
     $conn = $ctl->init();
     if ($conn == 1) {
-        $res = $ctl->getLabelByType();
+        $res = $ctl->getLabelByType("all");
     } else {
         $res = "Error";
     }
@@ -34,20 +35,48 @@ $app->get('/recruitment', function ($request, $response, $args) {
 $app->group('/api', function ($group) {
     $group->get('/labels', function ($request, $response, $args) {
         $param = $request->getQueryParams();
-        if ($param['type'] == 'all') {
-            $ctl = new Controllers\recruitment();
-            $ctl->init();
-            $res = $ctl->getLabelByType();
-        } elseif ($param['type']) {
-            $ctl = new Controllers\recruitment();
-            $ctl->init();
-            $res = $ctl->getLabelByType($param['type']);
+        $ctl = new Controllers\recruitment();
+        $ctl->init();
+        $result = $ctl->getLabelByType($param['type']);
+
+        // if result is null, return 400
+        if ($result) {
+            $response->getBody()->write(json_encode($result));
+            $response = $response->withStatus(200);
+            return $response->withHeader('Content-Type', CONTENT_TYPE_JSON);
         } else {
             return $response->withStatus(400);
         }
-        $response->getBody()->write(json_encode($res));
-        $response = $response->withStatus(200);
-        return $response->withHeader('Content-Type', 'application/json;charset=utf8');
+    });
+
+    $group->post('/operators', function ($request, $response, $args) {
+        $rawBody = $request->getBody();
+        // omit too long body
+        if (strlen($rawBody) > MAX_REQ_BODY_LENGTH) {
+            $response->getBody()->write("Too long");
+            return $response->withStatus(400);
+        }
+
+        // check header
+        $headers = $request->getHeaders();
+        if (!strpos(strtolower($headers['Content-Type'][0]), "json")) {
+            $response->getBody()->write("Unsupported content");
+            return $response->withStatus(400);
+        }
+
+        $body = json_decode($rawBody);
+
+        $ctl = new Controllers\recruitment();
+        $ctl->init();
+        $result = $ctl->getOperatorByLabel($body);
+        if ($result) {
+            $response->getBody()->write(json_encode($result));
+            $response = $response->withStatus(200);
+            return $response->withHeader('Content-Type', CONTENT_TYPE_JSON);
+        } else {
+            $response->getBody()->write("Invalid query");
+            return $response->withStatus(400);
+        }
     });
 });
 
