@@ -53,14 +53,14 @@ $app->group('/api', function ($group) {
         $rawBody = $request->getBody();
         // omit too long body
         if (strlen($rawBody) > MAX_REQ_BODY_LENGTH) {
-            $response->getBody()->write("Too long");
+            $response->getBody()->write(json_encode(["Too long"]));
             return $response->withStatus(400);
         }
 
         // check header
         $headers = $request->getHeaders();
         if (!strpos(strtolower($headers['Content-Type'][0]), "json")) {
-            $response->getBody()->write("Unsupported content");
+            $response->getBody()->write(json_encode(["Unsupported content"]));
             return $response->withStatus(400);
         }
 
@@ -74,7 +74,7 @@ $app->group('/api', function ($group) {
             $response = $response->withStatus(200);
             return $response->withHeader('Content-Type', CONTENT_TYPE_JSON);
         } else {
-            $response->getBody()->write("Invalid query");
+            $response->getBody()->write(json_encode(["Invalid query"]));
             return $response->withStatus(400);
         }
     });
