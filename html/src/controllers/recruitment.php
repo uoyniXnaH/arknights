@@ -70,7 +70,7 @@ class recruitment {
             return null;
         }
 
-        // if more than 4 labelss, keep 1st-4th only
+        // if more than 4 labels, keep 1st-4th only
         if (count($labels) > 4) {
             $labels = array_slice($labels, 0, 4);
         }
@@ -90,7 +90,7 @@ class recruitment {
 
         // and this is i
         $index = 0;
-        $sql = "select type from recruitment_label where value=:value";
+        $sql = "select type,attr from recruitment_label where value=:value";
         foreach ($labels as $label) {
             // skip if not string
             if (!is_string($label)) {
@@ -105,6 +105,13 @@ class recruitment {
                 continue;
             }
 
+            // set rarity limit
+            if ($type[0]['attr'] == 1) {
+                $raritySel = "";
+            } else {
+                $raritySel = "and rarity<6";
+            }
+
             // if affix, append to xAffices
             if ($type[0]['type'] == "affix") {
                 $xAffices[] = ":label_" . $index;
@@ -113,11 +120,6 @@ class recruitment {
             }
             $xParams[':label_' . $index] = $label;
             $index++;
-        }
-
-        // return empty array if no effective label
-        if (empty($xAffices) && empty($xLabels)) {
-            return ["operators" => []];
         }
 
         // return all operators if "all" is in labels
@@ -130,19 +132,25 @@ class recruitment {
             return ["operators" => $result];
         }
 
+        // return empty array if no effective label
+        if (empty($xAffices) && empty($xLabels)) {
+            return ["operators" => []];
+        }
+
         // query codenames from xAffices and xLabels
         // statement eg:
         // ------------------- //
         // SELECT o.codename
         // FROM
         //   recruitment_operator AS o JOIN operator_affix AS a
-        // WHERE
+        // WHERE (
         //   (o.codename=a.codename AND a.affix IN (affix...))
         // OR
         //   (o.codename=a.codename AND (o.class=... OR o.position=...))
+        // ) AND o.rarity<6
         // GROUP BY o.codename
         // ------------------- //
-        $sql = "select o.codename from recruitment_operator as o join operator_affix as a where ";
+        $sql = "select o.codename from recruitment_operator as o join operator_affix as a where (";
         if (!empty($xAffices)) {
             $subSql1 = "(o.codename=a.codename and a.affix in (" . implode(",", $xAffices) . "))";
         } else {
@@ -153,7 +161,7 @@ class recruitment {
         } else {
             $subSql2 = "false";
         }
-        $sql .= $subSql1 . " or " . $subSql2 . " group by o.codename";
+        $sql .= "$subSql1 or $subSql2) $raritySel group by o.codename";
         $stmt = $this->dbConn->prepare($sql);
         $stmt->execute($xParams);
         $codenames = $stmt->fetchAll(PDO::FETCH_COLUMN, 0);
