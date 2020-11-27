@@ -78,6 +78,21 @@ $app->group('/api', function ($group) {
             return $response->withStatus(400);
         }
     });
+
+    $group->get('/ingredients', function ($request, $response, $args) {
+        $param = $request->getQueryParams();
+        $ctl = new Controllers\material();
+        $ctl->init();
+        $result = $ctl->getIngredient($param['material']);
+
+        if ($result) {
+            $response->getBody()->write(json_encode($result));
+            $response = $response->withStatus(200);
+            return $response->withHeader('Content-Type', CONTENT_TYPE_JSON);
+        } else {
+            return $response->withStatus(400);
+        }
+    });
 });
 
 // resource files route
