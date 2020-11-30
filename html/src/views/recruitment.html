@@ -6,18 +6,40 @@
 <body>
 <div class="main">
   <h2> 公开招募计算器 </h2>
-  {% set typeTable = {
-    'qualification':'资质',
-    'position':'位置',
-    'class':'职业',
-    'affix':'词缀'} %}
-  {% for type in res|keys %}
-    <p> {{ attribute(typeTable,type) }} :
-    {% for i in attribute(res,type) %}
-      {{ i.value }},
+  <table>
+  <tr>
+    <td> 资质 </td>
+    <td>
+    {% for i in res.qualification %}
+      {{ i.value }}
     {% endfor %}
-    </p>
-  {% endfor %}
+    </td>
+  </tr>
+  <tr>
+    <td> 位置 </td>
+    <td>
+    {% for i in res.position %}
+      {{ i.value }}
+    {% endfor %}
+    </td>
+  </tr>
+  <tr>
+    <td> 职业 </td>
+    <td>
+    {% for i in res.class %}
+      {{ i.value }}
+    {% endfor %}
+    </td>
+  </tr>
+  <tr>
+    <td> 词缀 </td>
+    <td>
+    {% for i in res.affix %}
+      {{ i.value }}
+    {% endfor %}
+    </td>
+  </tr>
+  </table>
 </div>
 </body>
 </html>

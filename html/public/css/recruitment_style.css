@@ -1,7 +1,11 @@
 body {
   font-size: 18px;
-  color: #ffeebb;
+  color: #51a0c0;
   background-color: #555555;
+}
+
+h2 {
+  font-size: 48px;
 }
 
 div.main {
@@ -10,3 +14,4 @@ div.main {
   width: 80%;
   background-color: #001a21;
 }
+
