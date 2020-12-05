@@ -1,11 +1,11 @@
 body {
-  font-size: 18px;
+  font-size: 36px;
   color: #51a0c0;
   background-color: #555555;
 }
 
 h2 {
-  font-size: 48px;
+  font-size: 80px;
 }
 
 div.main {
@@ -15,3 +15,16 @@ div.main {
   background-color: #001a21;
 }
 
+table, td {
+  border: 1px solid white;
+  border-collapse: collapse;
+}
+
+td.head {
+  width: 100px;
+  vertical-align: top;
+}
+
+td.value {
+  width: 500px;
+}

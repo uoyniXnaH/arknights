@@ -8,32 +8,32 @@
   <h2> 公开招募计算器 </h2>
   <table>
   <tr>
-    <td> 资质 </td>
-    <td>
+    <td class="head"> 资质 </td>
+    <td class="value">
     {% for i in res.qualification %}
       {{ i.value }}
     {% endfor %}
     </td>
   </tr>
   <tr>
-    <td> 位置 </td>
-    <td>
+    <td class="head"> 位置 </td>
+    <td class="value">
     {% for i in res.position %}
       {{ i.value }}
     {% endfor %}
     </td>
   </tr>
   <tr>
-    <td> 职业 </td>
-    <td>
+    <td class="head"> 职业 </td>
+    <td class="value">
     {% for i in res.class %}
       {{ i.value }}
     {% endfor %}
     </td>
   </tr>
   <tr>
-    <td> 词缀 </td>
-    <td>
+    <td class="head"> 词缀 </td>
+    <td class="value">
     {% for i in res.affix %}
       {{ i.value }}
     {% endfor %}
